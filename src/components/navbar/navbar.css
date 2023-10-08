@@ -1,0 +1,23 @@
+.navbar-container {
+    height: 68px;
+    display: flex;
+    align-items: center;
+}
+.navbar-container .app-title {
+    font-size: 2rem;
+    color: var(--color-primary)
+}
+
+.navbar-container .navbar-links {
+    text-align: end;
+    margin-right: 1rem;
+}
+.navbar-container .navbar-links > a{
+    padding: 0 0.5rem;
+    color: black;
+    text-decoration: none;;
+}
+
+.navbar-container .navbar-links > a:hover {
+    color: var(--color-primary);
+}

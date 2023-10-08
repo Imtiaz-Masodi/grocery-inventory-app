@@ -1,13 +1,65 @@
+* {
+  box-sizing: border-box;
+  --color-primary: #149099;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Poppins', 'Roboto', sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    background-color: #ebebeb;
+}
+
+.font-lobster {
+  font-family: 'Lobster', cursive !important;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.MuiDataGrid-columnHeaders .MuiDataGrid-columnHeader .MuiDataGrid-columnHeaderTitleContainerContent {
+  font-weight: 500 !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.main-content {
+  padding: 1rem;
+}
+
+.main-content > .MuiPaper-root {
+  min-height:  calc(100vh - (68px + 2rem));
+}
+
+.h-100 {
+  height: 100%;
+}
+
+.p-0 {
+  padding: 0 !important;
+}
+.p-1 {
+  padding: 1rem;
+}
+.py-1 {
+  padding: 1rem 0;
+}
+.p-2 {
+  padding: 2rem;
+}
+.my-5 {
+  margin: 5rem 0;
+}
+
+.br-1 {
+  border-radius: 1rem !important;
+}
+
+.MuiPaper-root:has(.inventory-table) {
+  /* padding: 0 !important; */
 }
