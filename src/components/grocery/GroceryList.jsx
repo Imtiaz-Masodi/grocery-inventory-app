@@ -21,7 +21,7 @@ const GroceryList = () => {
     const [errorMessage, setErrorMessage] = useState(null);
     const [groceries, setGroceries] = useState([]);
     const [showGroceryForm, setShowGroceryForm] = useState(false);
-    const [categories, setCategories] = useState([addCategory]);
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
         fetchGroceries();
@@ -32,7 +32,7 @@ const GroceryList = () => {
         try {
             const res = await axiosInstance.get("/category");
             if (res.data.status === "success" && res.data.payload?.length > 0) {
-                setCategories([...res.data.payload, addCategory]);
+                setCategories(res.data.payload);
             } else {
             }
         } catch (ex) {}
