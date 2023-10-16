@@ -123,9 +123,13 @@ const GroceryItemForm = ({ categories, addNewCategory, onCloseDialog }) => {
     }
 
     useEffect(() => {
-        const updatedFormState = { ...formState };
-        updatedFormState.category.options = categories;
-        updateFormState(updatedFormState);
+        updateFormState(formState => ({
+            ...formState,
+            category: {
+                ...formState.category,
+                options: categories,
+            }
+        }));
     }, [categories]);
 
     return (

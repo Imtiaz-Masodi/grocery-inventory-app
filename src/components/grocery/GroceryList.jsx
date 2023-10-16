@@ -11,7 +11,6 @@ import {
     Container,
     Dialog,
     Grid,
-    Modal,
     Typography,
 } from "@mui/material";
 
