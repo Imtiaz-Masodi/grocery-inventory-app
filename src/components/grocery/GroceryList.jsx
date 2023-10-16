@@ -32,7 +32,7 @@ const GroceryList = () => {
         try {
             const res = await axiosInstance.get("/category");
             if (res.data.status === "success" && res.data.payload?.length > 0) {
-                setCategories(res.data.payload);
+                setCategories([...res.data.payload, addCategory]);
             } else {
             }
         } catch (ex) {}
@@ -64,6 +64,10 @@ const GroceryList = () => {
         setShowGroceryForm(false);
         if (refreshList === true) fetchGroceries();
     };
+    
+    const addNewCategory = (categoryItem) => {
+        setCategories([...categories.slice(0, categories.length - 1), categoryItem, ...categories.slice(categories.length - 1)]);
+    }
 
     const tableColumns = [
         { field: "name", headerName: "Name", flex: 15 },
@@ -151,6 +155,7 @@ const GroceryList = () => {
                     <Card className="p-2 br-1">
                         <GroceryItemForm
                             categories={categories}
+                            addNewCategory={addNewCategory}
                             onCloseDialog={handleGroceryFormClose}
                         />
                     </Card>

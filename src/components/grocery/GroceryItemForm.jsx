@@ -3,7 +3,9 @@ import {
     Alert,
     Autocomplete,
     Button,
+    Card,
     Container,
+    Dialog,
     Grid,
     IconButton,
     TextField,
@@ -11,8 +13,9 @@ import {
 } from "@mui/material";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import axiosInstance from "../../network/axios-instance";
+import CategoryForm from "../category/CategoryForm";
 
-const GroceryItemForm = ({ categories, onCloseDialog }) => {
+const GroceryItemForm = ({ categories, addNewCategory, onCloseDialog }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [showAddCategoryForm, setShowAddCategoryForm] = useState(false);
     const [formErrorMessage, setFormErrorMessage] = useState(null);
@@ -107,6 +110,18 @@ const GroceryItemForm = ({ categories, onCloseDialog }) => {
         }
     };
 
+    const handleCategoryFormClose = (newCategoryItem = undefined) => {
+        if (newCategoryItem && newCategoryItem._id) {
+            addNewCategory(newCategoryItem);
+
+            const updatedFormState = { ...formState };
+            updatedFormState.category.value = newCategoryItem._id;
+            updatedFormState.category.selectedItem = newCategoryItem;
+            updateFormState(updatedFormState);
+        }
+        setShowAddCategoryForm(false);
+    }
+
     useEffect(() => {
         const updatedFormState = { ...formState };
         updatedFormState.category.options = categories;
@@ -114,121 +129,136 @@ const GroceryItemForm = ({ categories, onCloseDialog }) => {
     }, [categories]);
 
     return (
-        <Container className="p-0">
-            <Grid
-                container
-                justifyContent={"space-between"}
-                alignItems="center"
-                style={{ marginBottom: "1rem" }}
-            >
-                <Typography variant="h5">Add Grocery Item</Typography>
-                <IconButton
-                    size="large"
-                    color="inherit"
-                    onClick={onCloseDialog}
+        <>
+            <Container className="p-0">
+                <Grid
+                    container
+                    justifyContent={"space-between"}
+                    alignItems="center"
+                    style={{ marginBottom: "1rem" }}
                 >
-                    <CloseRoundedIcon />
-                </IconButton>
-            </Grid>
-            <Grid container spacing="1rem">
-                {formErrorMessage && (
-                    <Grid item xs={12}>
-                        <Alert severity="error">{formErrorMessage}</Alert>
-                    </Grid>
-                )}
-                <Grid item sm={12}>
-                    <TextField
-                        label="Name"
-                        name="name"
-                        onChange={handleOnChange}
-                        value={formState.name.value}
-                        error={formState.name.errorMessage}
-                        helperText={formState.name.errorMessage}
-                        variant="outlined"
-                        size="small"
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item sm={12}>
-                    <TextField
-                        label="Price"
-                        name="price"
-                        onChange={handleOnChange}
-                        value={formState.price.value}
-                        error={formState.price.errorMessage}
-                        helperText={formState.price.errorMessage}
-                        variant="outlined"
-                        type="number"
-                        inputMode="decimals"
-                        size="small"
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item sm={12}>
-                    <TextField
-                        label="Stock Count"
-                        name="stockCount"
-                        onChange={handleOnChange}
-                        value={formState.stockCount.value}
-                        error={formState.stockCount.errorMessage}
-                        helperText={formState.stockCount.errorMessage}
-                        variant="outlined"
-                        type="number"
-                        size="small"
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item sm={12}>
-                    <Autocomplete
-                        disablePortal
-                        options={formState.category.options}
-                        getOptionLabel={(option) => option?.name || ""}
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                size="small"
-                                label="Category"
-                            />
-                        )}
-                        onChange={(_, selectedItem) => {
-                            handleOnChange({
-                                target: {
-                                    name: "category",
-                                    value: selectedItem._id,
-                                    selectedItem,
-                                },
-                            });
-                        }}
-                        value={formState.category.selectedItem}
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item sm={12}>
-                    <TextField
-                        label="Description"
-                        name="description"
-                        value={formState.description.value}
-                        onChange={handleOnChange}
-                        variant="outlined"
-                        size="small"
-                        rows={3}
-                        multiline
-                        fullWidth
-                    />
-                </Grid>
-
-                <Grid item xs={12}>
-                    <Button
-                        variant="contained"
-                        disabled={isLoading}
-                        style={{ marginTop: "1rem" }}
-                        onClick={handleFormSubmit}
+                    <Typography variant="h5">Add Grocery Item</Typography>
+                    <IconButton
+                        size="large"
+                        color="inherit"
+                        onClick={onCloseDialog}
                     >
-                        Submit
-                    </Button>
+                        <CloseRoundedIcon />
+                    </IconButton>
                 </Grid>
-            </Grid>
-        </Container>
+                <Grid container spacing="1rem">
+                    {formErrorMessage && (
+                        <Grid item xs={12}>
+                            <Alert severity="error">{formErrorMessage}</Alert>
+                        </Grid>
+                    )}
+                    <Grid item sm={12}>
+                        <TextField
+                            label="Name"
+                            name="name"
+                            onChange={handleOnChange}
+                            value={formState.name.value}
+                            error={formState.name.errorMessage}
+                            helperText={formState.name.errorMessage}
+                            variant="outlined"
+                            size="small"
+                            fullWidth
+                        />
+                    </Grid>
+                    <Grid item sm={12}>
+                        <TextField
+                            label="Price"
+                            name="price"
+                            onChange={handleOnChange}
+                            value={formState.price.value}
+                            error={formState.price.errorMessage}
+                            helperText={formState.price.errorMessage}
+                            variant="outlined"
+                            type="number"
+                            inputMode="decimals"
+                            size="small"
+                            fullWidth
+                        />
+                    </Grid>
+                    <Grid item sm={12}>
+                        <TextField
+                            label="Stock Count"
+                            name="stockCount"
+                            onChange={handleOnChange}
+                            value={formState.stockCount.value}
+                            error={formState.stockCount.errorMessage}
+                            helperText={formState.stockCount.errorMessage}
+                            variant="outlined"
+                            type="number"
+                            size="small"
+                            fullWidth
+                        />
+                    </Grid>
+                    <Grid item sm={12}>
+                        <Autocomplete
+                            disablePortal
+                            options={formState.category.options}
+                            getOptionLabel={(option) => option?.name || ""}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    size="small"
+                                    label="Category"
+                                />
+                            )}
+                            onChange={(_, selectedItem) => {
+                                handleOnChange({
+                                    target: {
+                                        name: "category",
+                                        value: selectedItem._id,
+                                        selectedItem,
+                                    },
+                                });
+                            }}
+                            value={formState.category.selectedItem}
+                            fullWidth
+                        />
+                    </Grid>
+                    <Grid item sm={12}>
+                        <TextField
+                            label="Description"
+                            name="description"
+                            value={formState.description.value}
+                            onChange={handleOnChange}
+                            variant="outlined"
+                            size="small"
+                            rows={3}
+                            multiline
+                            fullWidth
+                        />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Button
+                            variant="contained"
+                            disabled={isLoading}
+                            style={{ marginTop: "1rem" }}
+                            onClick={handleFormSubmit}
+                        >
+                            Submit
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Container>
+
+            {showAddCategoryForm && (
+                <Dialog
+                    open
+                    onClose={handleCategoryFormClose}
+                    maxWidth={"sm"}
+                    PaperComponent="span"
+                >
+                    <Card className="p-2 br-1">
+                        <CategoryForm onCloseDialog={handleCategoryFormClose} />
+                    </Card>
+                </Dialog>
+            )}
+        </>
     );
 };
 
